@@ -1,0 +1,276 @@
+Name:			Dan Cassidy
+Date:			2014-02-11
+Homework #:		03
+Source File:	Homework 03 Algorithm.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+const int SAMPLE_SIZE = 23
+const int NUMBER_OF_SETS = 1000
+
+Function void main(void)
+[Inputs]
+char MenuChoice = 0
+
+[Outputs]
+
+
+[Equations]
+
+
+[Limits]
+
+
+[Algorithm]
+char MenuChoice = 0
+
+srand(time(NULL))
+
+do
+	MenuChoice = ShowMenu(Menu, MenuChoices, NumMenuItems)
+	output "\n" //add some padding between the menu and whatever is going to be displayed
+	case MenuChoice
+		1: ExplainBirthDayParadox()
+		2: VerifyBirthDayParadox()
+		3: DisplayBirthdaySet()
+		E: Exit
+while (MenuChoice != 'E')
+
+
+
+Function char ShowMenu()
+[Inputs]
+None
+
+[Outputs]
+RVDT char Choice
+
+[Equations]
+None
+
+[Limits]
+None
+
+[Algorithm]
+char Choice = '\0'
+bool IsValidChoice = false
+
+output "Please choose from the following menu:\n\n"
+output "  1)  Explain birthday paradox\n"
+output "  2)  Check birthday paradox by generating ", NUMBER_OF_SETS, " sets of birthdays\n"
+output "  3)  Display one set of ", SAMPLE_SET, " birthdays\n"
+output "  E)  Exit\n"
+
+do
+	input(_getch) Choice //use _getche for testing
+	Choice = toupper(Choice)
+	case Choice
+		1:
+		2:
+		3:
+		E:
+			IsValidChoice = true
+	end case
+while (NOT IsValidChoice)
+
+return Choice
+
+
+
+Function void ShowLine()
+[Inputs]
+None
+
+[Outputs]
+None
+
+[Equations]
+None
+
+[Limits]
+None
+
+[Algorithm]
+output "\n----------------------------------------------------------------------\n\n"
+
+
+
+Function void ExplainBirthdayParadox()
+[Inputs]
+None
+
+[Outputs]
+None
+
+[Equations]
+None
+
+[Limits]
+None
+
+[Algorithm]
+output "If 23 persons are chosen at random, then the chances are more than 50% that at least two will have the same birthday!\n\n"
+
+
+
+Function void VerifyBirthdayParadox()
+[Inputs]
+None
+
+[Outputs]
+None
+
+[Equations]
+BirthdaySet[i] == BirthdaySet[i + 1]
+
+[Limits]
+
+
+[Algorithm]
+int BirthdaySet[SAMPLE_SIZE] = { 0 }
+int NumberOfMatches = 0
+bool IsMatch = false
+
+output "Generating ", NUMBER_OF_SETS, " sets of ", SAMPLE_SIZE, " birthdays and checking for matches...\n\n"
+
+for i = 1, while i <= NUMBER_OF_SETS, increment i
+	GenerateBirthdaySet(BirthdaySet)
+	IsMatch = false
+	for j = 0, while j < SAMPLE_SIZE - 1 AND NOT IsMatch, increment j
+		if (BirthdaySet[j] == BirthdaySet[j + 1])
+			++NumberOfMatches
+			IsMatch = true
+		end if
+	end for
+end for
+
+output setprecision(1)
+output "Results: ", NumberOfMatches, " out of ", NUMBER_OF_SETS, " (", (float)NumberOfMatches / NUMBER_OF_SETS, "%) of the sets contained matching birthdays\n\n"
+
+
+
+Function void GenerateSortedBirthdaySet(unsigned short int BirthdaySet[])
+[Inputs]
+None
+
+[Ouputs]
+ptr unsigned short int BirthdaySet[]
+
+[Equations]
+(in a loop) BirthdaySet[i] = rand() % 365 + 1
+
+[Limits]
+BirthdaySet needs to be an array of size SAMPLE_SIZE
+
+[Algorithm]
+for i = 0, while i < SAMPLE_SIZE, increment i
+	BirthdaySet[i] = rand() % 365 + 1
+end for
+
+sort(BirthdaySet, BirthdaySet + SAMPLE_SIZE)
+
+
+
+Function void DisplayBirthdaySet()
+[Inputs]
+None
+
+[Outputs]
+None
+
+[Equations]
+None
+
+[Limits]
+None
+
+[Algorithm]
+const int COLUMNS = 3
+
+char *MonthName[13] = { "ERROR", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }
+
+int BirthdaySet[SAMPLE_SIZE + 1] = { 0 }
+int SameCount = 1, DisplayCount = 0
+int MonthNumber = 0, DayNumber = 0
+
+GenerateSortedBirthdaySet(BirthdaySet)
+
+output "Here are the results of generating a set of ", SAMPLE_SIZE, " birthdays:\n\n"
+
+for i = 0, while i < SAMPLE_SIZE; increment i
+	if (BirthdaySet[i] == BirthdaySet[i + 1])
+		++SameCount
+	else
+		++DisplayCount
+		ConvertDayOfYear(BirthdaySet[i], &MonthNumber, &DayNumber)
+		if (SameCount > 9)
+			output "(", SameCount, ") "
+		else if (SameCount > 1)
+			output " (", SameCount, ") "
+		else
+			output "     "
+		end if
+		output setiosflags(ios::left), setw(9), MonthName[MonthNumber]
+		output " "
+		output resetiosflags(ios::left), setw(2), DayNumber
+		if (!(DisplayCount % COLUMNS) OR i == SAMPLE_SIZE - 1)
+			output "\n"
+		else
+			output "  "
+		end if
+		SameCount = 1
+	end if
+end for
+
+
+
+Function void ConvertDayOfYear(int DayOfYear, int &MonthNumber, int &DayNumber)
+[Inputs]
+int DayOfYear
+
+[Outputs]
+ref int MonthNumber
+ref int DayNumber
+
+[Equations]
+DayOfYear -= DaysInMonth(MonthNumber)
+
+[Limits]
+DayOfYear should be >= 1 and <= 365
+
+[Algorithm]
+MonthNumber = 1
+
+while DayOfYear > DaysInMonth(MonthNumber)
+	DayOfYear -= DaysInMonth(MonthNumber)
+	increment MonthNumber
+end while
+
+DayNumber = DayOfYear
+
+
+
+Function int DaysInMonth(int MonthNumber)
+[Inputs]
+int MonthNumber
+
+[Outputs]
+RVDT int
+
+[Equations]
+None
+
+[Limits]
+MonthNumber should be >= 1 and <= 12
+
+[Algorithm]
+case MonthNumber
+	2: return 28
+	4:
+	6:
+	9:
+	11: return 30
+	default: return 31
+end case

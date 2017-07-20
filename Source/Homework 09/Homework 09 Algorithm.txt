@@ -1,0 +1,121 @@
+Name:			Dan Cassidy
+Date:			2014-04-09
+Homework #:		09
+Source File:	Homework 09 Algorithm.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+Function int ReadList(NodePtr List, char FileName[])
+[Inputs]
+NodePtr (*Node) List
+char FileName[]
+
+[Outputs]
+RVDT int
+
+[Equations]
+
+
+[Limits]
+List must be a singly-linked list which includes a dummy head node.
+
+[Algorithm]
+//Deletes current list to ensure memory leaks do not occur
+ZapList(List)
+
+declare ifstream fin
+declare char Ch and initialize to 0
+
+//Attempt to open FileName for input
+fin.open(FileName)
+
+//Check if opening of FileName for input was successful
+if (fin.fail())
+	//Opening of FileName was NOT successful
+	return 1
+end if
+
+//Get first character in FileName; will also trigger EOF bit if FileName empty
+fin.get(Ch)
+
+//Loop through FileName, reading sequential characters and adding them to the linked list
+while (!fin.eof())
+	//Declare new Node and attempt to allocate memory for it
+	declare NodePtr NewNode and initialize to new(nothrow) Node
+
+	//Check if memory allocation was successful
+	if (NewNode equalto NULL)
+		//memory allocation error; close FileName then abort program
+		fin.close()
+		AbortProgram()
+	end if
+
+	//Memory was allocated successfully; fill in the data for the new Node, making Link NULL
+	//to guard against a null pointer
+	set NewNode->Ch to Ch
+	set NewNode->Link to NULL
+
+	//Add the new Node to the end of the linked list and then move List to the new final Node
+	set List->Link to NewNode
+	set List to List->Link
+
+	//Get next character in FileName or trigger EOF
+	fin.get(Ch)
+end while
+
+//Close FileName
+fin.close()
+
+return 0
+
+
+
+Function void SortList(NodePtr List)
+[Inputs]
+NodePtr (*Node) List
+
+[Outputs]
+None
+
+[Equations]
+
+
+[Limits]
+List must be a singly linked list with a dummy head node.
+
+[Algorithm]
+if (List->Link equalto NULL)
+	//Empty list
+	return
+end if
+
+declare NodePtr EndSorted and initialize to List->Link
+
+//Iterates through the list, sorting as it goes
+while (EndSorted->Link notequalto NULL)
+	declare NodePtr SearchNode and initialize to EndSorted->Link
+	declare NodePtr SmallNode and initialize to EndSorted
+	declare unsigned char TempCh and initialize to 0
+
+	//SearchNode iterates from the EndSorted+1 Node to end of list, finding the smallest Node
+	//along the way and storing its address in SmallNode
+	while (SearchNode notequalto NULL)
+		if (SearchNode->Ch lessthan SmallNode->Ch)
+			SmallNode = SearchNode
+		end if
+		set SearchNode to SearchNode->Link
+	end while
+
+	//If SmallNode->Ch is different than EndSorted->Ch then it must be smaller; swap the
+	//values utilizing a temporary storage variable
+	if (SmallNode->Ch notequalto EndSorted->Ch)
+		set TempCh to EndSorted->Ch
+		set EndSorted->Ch to SmallNode->Ch
+		set SmallNode->Ch to TempCh
+	end if
+
+	//Iterate to the next link in the list
+	set EndSorted to EndSorted->Link
+end while

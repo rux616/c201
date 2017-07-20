@@ -1,0 +1,302 @@
+Name:			Dan Cassidy
+Date:			2014-02-03
+Homework #:		02
+Source File:	Homework 02 Algorithm.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+const int MAX_SENTENCE_LENGTH = 300
+
+Function void main(void)
+[Inputs]
+char Sentence[MAX_SENTENCE_LENGTH]
+
+[Outputs]
+char CensoredSentence[MAX_SENTENCE_LENGTH]
+
+[Equations]
+
+
+[Limits]
+
+
+[Algorithm]
+char Sentence[MAX_SENTENCE_LENGTH] = ""
+
+char StringBad[] = "hell"
+char StringGood[] = "heck"
+
+GetSentence(Sentence)
+
+while (Sentence[0])
+	CopyString(Sentence, CensoredSentence)
+	Censor(CensoredSentence, StringBad, StringGood)
+	ShowSentences(Sentence, CensoredSentence)
+	GetSentence(Sentence)
+end while
+
+output "Goodbye!"
+
+
+
+Function void GetSentence(char [])
+[Inputs]
+None
+
+[Outputs]
+ptr char Sentence[]
+
+[Equations]
+None
+
+[Limits]
+None
+
+[Algorithm]
+output "Enter a sentence: "
+input(getline) Sentence
+
+
+
+Function void CopyString(char [], char [])
+[Inputs]
+ptr char OriginalString[]
+
+[Outpus]
+ptr char CopiedString[]
+
+[Equations]
+None
+
+[Limits]
+OriginalString[] must be a null-terminated character array
+
+[Algorithm]
+CopiedString[0] = OriginalString[0]
+
+for i = 1, while OriginalString[i - 1] != '\0', increment i
+	CopiedString[i] = OriginalString[i]
+end for
+
+
+
+Function void ShowSentences(char [], char [])
+[Inputs]
+ptr char Sentence[]
+ptr char CensoredSentence[]
+
+[Outputs]
+None
+
+[Equations]
+None
+
+[Limits]
+Sentence[] and CensoredSentence[] must be null-terminating character arrays
+
+[Algorithm]
+output "\nOriginal: \"", Sentence[], "\"\n"
+output "Censored: \"", CensoredSentence[], "\"\n\n"
+output "--------------------------------------------------------------------\n\n"
+
+
+
+Function void Censor(char [], char [], char [])
+[Inputs]
+ptr char StringCensored[]
+ptr char StringBad[]
+ptr char StringGood[]
+
+[Outputs]
+ptr char StringCensored[]
+
+[Equations]
+None
+
+[Limits]
+StringCensored[], StringBad[], and StringGood[] must all be null-terminating character arrays
+StringBad[] must not be an empty string
+
+[Algorithm]
+char PreviousCh = '\0'
+char Ch = '\0'
+//char NextCh = '\0'
+
+for i = 0, while StringCensored[i] != '\0', increment i
+	Ch = StringCensored[i]
+	//ChNext = StringCensored[i + 1]
+	if (IsMatch(&StringCensored[i], StringBad))
+		if (NOT isalnum(ChPrevious) AND NOT isalnum(StringCensored[i + StringLength(StringBad)]))
+			ReplaceString(&StringCensored[i], StringLength(StringBad), StringGood)
+			i += StringLength(StringGood) - 1
+			Ch = StringCensored[StringLength(StringGood) - 1]
+		end if
+	end if
+	ChPrevious = Ch
+end for
+
+
+
+Function bool IsMatch(char [], char [], bool)
+[Inputs]
+ptr char StringToCheck[]
+ptr char StringToFind[]
+bool CaseSensitive = false
+
+[Outputs]
+RVDT bool Matches
+
+[Equations]
+None
+
+[Limits]
+*StringToCheck and StringToFind[] must be null-terminating character arrays
+
+[Algorithm]
+bool Matches = true
+
+for i = 0, while StringToFind[i] != '\0' AND Matches == true, increment i
+	if (CaseSensitive)
+		if (StringToFind[i] != StringToCheck[i])
+			Matches = false
+		end if
+	else
+		if (tolower(StringToFind[i]) != tolower(StringToCheck[i]))
+			Matches = false
+		end if
+	end if
+end for
+
+return Matches
+
+
+
+Function int StringLength(char [])
+[Inputs]
+ptr char String[]
+
+[Outputs]
+RVDT int Length
+
+[Equations]
+None
+
+[Limits]
+String[] must be a null-terminating character array.
+
+[Algorithm]
+int Length = 0
+
+for i = 0, while String[i] != '\0', increment i
+	++Length
+end for
+
+return Length
+
+
+
+Function void ReplaceString(char [], int, char [], int = 0)
+[Inputs]
+ptr char String[]
+int NumCharToReplace
+ptr char ReplacementString[]
+int ReplacementCase = 0 (0: matches case in String and if the character being replaced isn't a letter, it will use whatever the last case encountered, 1: lower case, 2: upper case, 3: ignores case and uses whatever is in ReplacementString[])
+
+[Outputs]
+ptr char String[]
+
+[Equations]
+
+
+[Limits]
+String[] and ReplacementString[] must be null-terminating character arrays
+NumCharToReplace must be positive
+
+[Algorithm]
+int IsUpper = false
+
+ResizeString(String, NumCharToReplace - 1, StringLength(ReplacementString) - NumCharToReplace)
+
+for i = 0, while ReplacementString[i] != '\0', increment i
+	switch ReplacementCase
+		case 0:
+			match case
+			if (isalnum(String[i]))
+				IsUpper = isupper(String[i])
+			end if
+			if (IsUpper)
+				String[i] = toupper(ReplacementString[i])
+			else
+				String[i] = tolower(ReplacementString[i])
+			break
+
+		case 1:
+			lower case
+			String[i] = tolower(ReplacementString[i])
+			break
+
+		case 2:
+			upper case
+			String[i] = toupper(ReplacementString[i])
+			break
+
+		case 3:
+			ignore case, use ReplacementString as-is
+			String[i] = ReplacementString[i]
+			break
+	end select
+end for
+
+
+
+Function void ResizeString(char [], int, int, char)
+[Inputs]
+ptr char String[]
+int ResizeAnchor //subscript
+int ResizeLength //number
+char Filler = ' '
+
+[Outputs]
+ptr char String[]
+
+[Equations]
+None
+
+[Limits]
+String[] must be a null-terminating character array
+ResizeAnchor must not be larger than the length of the string - 1
+If ResizeLength is negative (shrink), ResizeAnchor must be non-negative
+If ResizeLength is negative (shrink), (ResizeAnchor + ResizeLength) must not be less than -1
+If ResizeLength is positive (expand), ResizeAnchor must not be less than -1
+If ResizeLength is positive (expand), (the length of String + ResizeLength) must not be greater than the largest subscript of String[]
+
+[Algorithm]
+if (ResizeLength < 0)
+	//shrink array
+	//works from right side of anchor point
+	//e.g. String = a|b|c|\0 ; ResizeAnchor = 0 ; ResizeLength = -1 ; this will result in b|c|\0
+	for i = ResizeAnchor + 1,  while String[i - 1] != '\0', increment i
+		String[i + ResizeLength] = String[i]
+	end for
+else if (ResizeLength > 0)
+	//expand array
+
+	//clarify what the anchor point means for expansion.  does it expand from the left of the anchor point or the right?  RIGHT
+
+	//If the Anchor + Length of expansion is longer than the string length, prefill the space beyond the null-terminator of String with the Filler.  This prevents having unknown values in subscripts that aren't explicitly touched by the for loop.
+	if (ResizeAnchor + ResizeLength > StringLength(String))
+		for i = StringLength(String) + 1, while i <= ResizeAnchor + ResizeLength, increment i
+			String[i] = Filler
+		end for
+	end if
+
+	//
+	for i = StringLength(String), while i > ResizeAnchor, decrement i
+		String[i + ResizeLength] = String[i]
+		if (Filler)
+			String[i] = Filler
+		end if
+	end for
+end if

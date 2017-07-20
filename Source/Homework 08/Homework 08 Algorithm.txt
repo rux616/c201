@@ -1,0 +1,156 @@
+Name:			Dan Cassidy
+Date:			2014-04-05
+Homework #:		08
+Source File:	Homework 08 Algorithm.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+Function void ZapList(NodePtr List)
+[Inputs]
+NodePtr (*Node) List
+
+[Outputs]
+None
+
+[Equations]
+(in a loop) delete a link in the linked list
+
+[Limits]
+List must be a valid linked list with a dummy head node.
+
+[Algorithm]
+declare NodePtr Temp and initialize to NULL
+
+//Preserve Dummy Head Node, but change its Link to NULL
+set Temp to List
+set List to List->Link
+set Temp->Link to NULL
+
+//Run through the rest of the linked list and delete the other Nodes
+while (List notequalto NULL)
+	set Temp to List
+	set List to List->Link
+	delete Temp
+end while
+
+
+
+Function void AddNode(char NewChar, NodePtr List)
+[Inputs]
+char NewChar
+NodePtr (*Node) List
+
+[Outputs]
+None
+
+[Equations]
+
+
+[Limits]
+List is a singly linked list with a dummy head node
+
+[Algorithm]
+//Create new Node and fill with data - Doing this first prevents
+//unnecessarily running through the rest of the function if memory
+//allocation fails
+declare NodePtr NewNode and initialize to new(nothrow) Node
+if (NewNode equalto NULL)
+	return
+end if
+set NewNode->Ch to NewChar
+set NewNode->Link to NULL
+
+//Iterate through linked list to final Node
+while (List->Link notequalto NULL)
+	set List to List->Link
+end while
+
+//Change final Node's Link to the new Node
+set List->Link to NewNode
+
+
+
+Function void DeleteNode(char CharToDelete, NotePtr List, int &CharFound)
+[Inputs]
+char CharToDelete
+NodePtr (*Node) List
+
+[Outputs]
+RefPar int &CharFound
+
+[Equations]
+
+
+[Limits]
+List is a singly linked list with a dummy head node, CharToDelete does not equal the value of the Dummy Head Node
+
+[Algorithm]
+declare NodePtr NodeToBeDeleted and initialize to NULL
+
+//Make sure that the list has data in it before continuing
+if (List->Link equalto NULL)
+	set CharFound to 0
+	return
+else
+	set NodeToBeDeleted to List->Link
+end if
+
+//Iterate through linked list until CharToDelete is found or Link is NULL
+while (NodeToBeDeleted->Ch notequalto CharToDelete AND NodeToBeDeleted->Link notequalto NULL)
+	set List to List->Link
+	set NodeToBeDeleted to NodeToBeDeleted->Link
+end while
+
+//Determine whether Link was NULL or CharToDelete was found
+if (NodeToBeDeleted->Ch notequalto CharToDelete)
+	//Link was NULL
+	set CharFound to 0
+else
+	//CharToDelete was found
+	set List->Link to NodeToBeDeleted->Link
+	delete NodeToBeDeleted
+	set CharFound to 1
+end if
+
+
+
+Function void BuildList(NodePtr List)
+[Inputs]
+NodePtr (*Node) List
+
+[Outputs]
+None
+
+[Equations]
+
+
+[Limits]
+List is a singly linked list with a dummy head node.
+
+[Algorithm]
+Clear list
+get char
+loop while char != \n
+add char to end of list
+
+ZapList(List)
+
+declare char NewChar and initialize to 0
+
+cin.get(NewChar)
+while (NewChar notequalto '\n')
+	declare NodePtr NewNode and initialize to NULL
+	
+	set NewNode to new(nothrow) Node
+	if (NewNode equalto NULL)
+		return
+	end if
+	set NewNode->Ch to NewChar
+	set NewNode->Link to NULL
+	set List->Link = NewNode
+	set List to List->Link
+	cin.get(NewChar)
+end while
+

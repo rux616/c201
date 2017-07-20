@@ -1,0 +1,14 @@
+Name:			Dan Cassidy
+Date:			
+Homework #:		
+Source File:	.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+List of Syntax Errors:
+1	ERR_MISSING_FILE_NAME		Missing file name
+2	ERR_TOO_MANY_ARGUMENTS		Too many arguments
+3	ERR_INVALID_OPTION			Invalid option (forgetting the '/', having an invalid character ('x' for example))
+4	ERR_FILENAME_TOO_LONG		Filename is longer than 32 chars

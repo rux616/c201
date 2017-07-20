@@ -1,0 +1,168 @@
+Name:			Dan Cassidy
+Date:			2014-03-13
+Homework #:		06
+Source File:	MyFloat2 Algorithm.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+Function friend ostream& operator<<(ostream &OutputVarName, const MyFloat &ClassVarName)
+[Thoughts]
+
+
+[Inputs]
+
+
+[Outputs]
+
+
+[Equations]
+
+
+[Limits]
+
+
+[Algorithm]
+output "0."
+
+if (NOT NumDigits)
+	output "?"
+else
+	for (declare unsigned short int i and initialize to 0, while i lessthan NumDigits, preincrement i)
+		output (int)Float[i]
+	end for
+end if
+
+
+
+Function friend istream& operator>>(istream &InputVarName, const MyFloat &ClassVarName)
+[Thoughts]
+
+
+[Inputs]
+
+
+[Outputs]
+
+
+[Equations]
+
+
+[Limits]
+
+
+[Algorithm]
+declare unsigned char Ch and initialize to 0
+declare unsigned char ChPrevious and initialize to 0
+declare bool Error and initialize to FALSE
+declare bool Finished and initialize to FALSE
+declare unsigned short integer i and initialize to 0
+
+input(>>) Ch
+while (NOT Error AND NOT Finished)
+	if (Ch equalto '0')
+		set ChPrevious to Ch
+		set Ch to input(cin.get)
+	else if (Ch equalto '.' AND ChPrevious isequalto '0')
+		set Finished to TRUE
+	else
+		set Error to TRUE
+	end if
+end while
+
+set Finished to FALSE
+
+for (set i to 0, while i lessthan MAX_PRECISION AND NOT Error AND NOT Finished, preincrement i)
+	set Ch to input(cin.get)
+	if (isdigit(Ch))
+		set Float[i] to Ch - '0'
+	else if (NOT i)
+		set Error to TRUE
+	else
+		set Finished to TRUE
+	end if
+end for
+
+cin.putback(Ch)
+
+if (Error)
+	set NumDigits to 0
+else if (Finished)
+	set NumDigits to i - 1
+else
+	set NumDigits to i
+end if
+
+for (set i to NumDigits, while i lessthan MAX_PRECISION, preincrement i)
+	set Float[i] to 0
+end for
+
+
+
+Function const bool MyFloat::operator>(const MyFloat &Other) const
+[Thoughts]
+Significant digits does not play a part in this function as it is looking purely at the value.  Therefore, if two MyFloats are compared, one at 0.123 and other other at 0.123000, they would be evaluated as == and return false.  THe significant digits merely represent additional opportunities for a MyFloat to be different.
+
+Significant digits do play a part in this function.  A value of 0.123 is less than a value of 0.123000.
+
+Uninitialized MyFloats are considered to be the smallest possible value, so this function will return false if *this is uninitialized regardless what Other is initialized to because it could only be greater than or equal to.  If *this is initalized to anything and Other is uninitalized, function will return true automatically.  If none of these conditions are met, the parameters will be compared and the appropriate value will be returned.
+
+[Inputs]
+const MyFloat *this
+const MyFloat &Other
+
+[Outputs]
+RVDT const bool
+
+[Equations]
+(in a for loop) Float[i] > Other.Float[i]
+
+[Limits]
+None
+
+[Algorithm]
+declare bool IsLessThan and initialize to FALSE
+declare bool IsGreaterThan and initialize to FALSE
+
+if (NOT NumDigits)
+	set IsGreaterThan to FALSE
+else if (NOT Other.NumDigits)
+	set IsGreaterThan to TRUE
+else
+	declare unsigned char CheckedPrecision and initialize to (NumDigits < Other.NumDigits ? NumDigits : Other.NumDigits)
+
+	for (declare unsigned short int i and initalize to 0, while i lessthan CheckedPrecision AND NOT IsLessThan AND NOT IsGreaterThan, preincrement i)
+		if (Float[i] lessthan Other.Float[i])
+			set IsLessThan to TRUE
+		else if (Float[i] greaterthan Other.Float[i])
+			set IsGreaterThan to TRUE
+	end for
+
+	if (NOT IsLessThan AND NOT IsGreaterThan)
+		if (NumDigits greaterthan Other.NumDigits)
+			set IsGreaterThan to TRUE
+		end if
+	end if
+end if
+
+return IsGreaterThan
+
+
+
+Function MyFloat& MyFloat::operator=(char MyFloatStr[])
+[Inputs]
+MyFloat *this
+char MyFloatStr[]
+
+[Outputs]
+RVDT const MyFloat&
+
+[Equations]
+None
+
+[Limits]
+None
+
+[Algorithm]
+???

@@ -1,0 +1,124 @@
+Name:			Dan Cassidy
+Date:			2014-01-28
+Homework #:		01
+Source File:	Homework 01.txt
+Class:			C-201 MW 1000
+Special:		DO NOT PRINT
+
+
+
+const int MAX_WORD_LENGTH = 15
+
+Function void main(void)
+[Inputs]
+char Ch
+
+[Outputs]
+int WordLengthList[]
+
+[Equations]
+Ch != EOF
+
+[Limits]
+
+
+[Algorithm]
+int WordLengthList[MAX_WORD_LENGTH + 1] = {0}
+
+do
+	++WordLengthList[WordLength()]
+while NOT WordLengthList[0]
+
+OutputResults(WordLengthList)
+
+
+
+Function int WordLength()
+[Inputs]
+None
+
+[Outputs]
+RVDT int
+
+[Equations]
+
+
+[Limits]
+
+
+[Algorithm]
+char Ch = 0
+char ChPrevious = ' '
+char ChNext = 0
+int Count = 0
+
+input Ch
+
+while (!cin.eof())
+	ChNext = cin.peek()
+	if (isalnum(Ch))
+		++Count
+	else if (Ch == '\'')
+		if (ChPrevious != '\'' AND NOT(isspace(ChPrevious) AND isspace(ChNext)))
+			++Count
+		end if
+	else if (Ch == '_')
+		if (ChPrevious != '_' AND NOT isspace(ChPrevious) AND NOT isspace(ChNext) )
+			++Count
+	else if (Ch == '-')
+		if (ChPrevious != '-' AND NOT isspace(ChPrevious) AND NOT isspace(ChNext) )
+			++Count
+	else if (isspace(Ch))
+		if (Count AND !(ChPrevious == '-' AND Ch != '\n'))
+			break
+	end if
+
+	ChPrevious = Ch
+	input Ch
+end while
+
+return (Count > MAX_WORD_LENGTH) ? MAX_WORD_LENGTH : Count
+
+
+// CHECK THE HYPHENS!
+
+What counts as part of a word:
+
+Apostrophies: Counted, More than one in a row ignored
+Underscores: Counted in a word, Leading/trailing ignored, More than one in a row ignored
+Hyphens: Counted in a word, Leading/trailing ignored, More than one in a row ignored
+Other Puctuation: Ignored
+Whitespace: Ignored, Used for word delimiting
+
+
+
+
+
+Function void OutputResults(int [])
+[Inputs]
+int WordLengthList[]
+
+[Outputs]
+None
+
+[Equations]
+
+
+[Limits]
+
+
+[Algorithm]
+int TotalWordLength = 0
+int NumberOfWords = 0
+
+output "Word Length         Frequency\n"
+	   "-----------         ---------\n"
+
+for i = 1 to MAX_WORD_LENGTH
+	TotalWordLength += WordLengthList[i] * i
+	NumberOfWords += WordLengthList[i]
+	output "     ", setw(2), i, "                 ", setw(2), WordLengthList[i], "\n"
+end for
+
+output setprecision(2)
+output "\nAverage word length: ", (NumberOfWords ? (float)TotalWordLength / NumberOfWords : 0)
